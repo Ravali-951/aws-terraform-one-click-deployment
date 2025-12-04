@@ -1,2 +1,3 @@
 #!/bin/bash
-echo "deploy script"
+terraform init
+terraform apply -auto-approve
