@@ -252,7 +252,27 @@ terraform destroy
 ---
 
 ```
-<img width="1024" height="1536" alt="image" src="https://github.com/user-attachments/assets/df2cd520-9aff-4607-9c22-f53f204acbf6" />
+
+✨ Live Project Link
+
+You can test the live deployed application here:
+
+Root Endpoint:
+👉 http://devops-assignment-alb-914552625.ap-south-1.elb.amazonaws.com/
+
+Health Check:
+👉 http://devops-assignment-alb-914552625.ap-south-1.elb.amazonaws.com/health
+
+---
+
+
+
+Special thanks to the Apt team for providing this assignment and the opportunity to demonstrate my skills. 🙏✨  
+It was a great learning experience and I truly appreciate it.  
+
+Thank you for reviewing my project! 😊👋
+
+
 
 
 
