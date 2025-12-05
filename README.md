@@ -44,178 +44,185 @@ High-level design:
 
 <img width="1024" height="1536" alt="image" src="https://github.com/user-attachments/assets/517408c3-6108-4e5f-84b3-47ae2e14f316" />
 
-2. What Terraform Creates
-Networking
 
-Custom VPC
 
-2 public subnets
+## 2. What Terraform Creates
 
-2 private subnets
+### Networking
+- Custom VPC  
+- 2 public subnets  
+- 2 private subnets  
+- Internet Gateway  
+- NAT Gateway  
+- Public and private route tables with proper associations  
 
-Internet Gateway
+### Security
+**ALB security group (alb-sg)**  
+- Inbound: TCP 80 from 0.0.0.0/0  
 
-NAT Gateway
+**EC2 security group (ec2-sg)**  
+- Inbound: TCP 8080 only from alb-sg  
 
-Public and private route tables with proper associations
+### Load Balancing & Compute
+- Application Load Balancer (ALB) in public subnets  
+- Target group with health check on `/health`  
+- Launch Template with simple user-data web app  
+- Auto Scaling Group (ASG)  
+  - Desired capacity: **2**
+  - Instances run in **private subnets**
 
-Security
+---
 
-ALB security group (alb-sg)
+## 3. Repository Structure
 
-Inbound: TCP 80 from 0.0.0.0/0
-
-EC2 security group (ec2-sg)
-
-Inbound: TCP 8080 from alb-sg
-
-Load Balancing & Compute
-
-Application Load Balancer (ALB) in public subnets
-
-Target group with health check on /health
-
-Launch template with user data (simple web app)
-
-Auto Scaling Group with desired capacity = 2
-(2 EC2 instances in private subnets)
-
-3. Repository Structure
+```
 aws-terraform-one-click-deployment/
 │
 ├── project/
 │   ├── main.tf            # Root Terraform file
 │   ├── vpc.tf             # VPC, subnets, IGW, NAT, route tables
 │   ├── security.tf        # Security groups
-│   ├── compute.tf         # Launch template, ASG, EC2 details
-│   ├── alb.tf             # ALB + target group + listener
-│   ├── outputs.tf         # alb_dns output
+│   ├── compute.tf         # Launch template, ASG
+│   ├── alb.tf             # ALB, target group, listener
+│   ├── outputs.tf         # ALB DNS output
 │   ├── variables.tf       # Input variables
 │   └── user-data.sh       # Simple web app (Hello + health)
 │
 └── README.md
+```
 
+*(Names may differ slightly depending on how files were organized.)*
 
-(Names may differ slightly depending on how files are split, but this is the idea.)
+---
 
-4. Prerequisites
+## 4. Prerequisites
 
-AWS account
+- AWS account  
+- IAM user with permissions for:
+  - VPC, subnets, IGW, NAT, route tables  
+  - EC2, Auto Scaling, Launch Templates  
+  - Elastic Load Balancing  
+- AWS CLI installed and configured:
 
-IAM user with permissions for:
-
-VPC, Subnets, IGW, NAT, Route tables
-
-EC2, Auto Scaling, Launch templates
-
-Elastic Load Balancing
-
-AWS CLI installed and configured:
-
+```
 aws configure
-# enter Access Key, Secret Key, region (ap-south-1), output json
+```
 
+- Terraform 1.x installed
 
-Terraform installed (1.x)
+---
 
-5. How to Deploy
+## 5. How to Deploy
 
-All commands are run inside the project/terraform (or project) directory of this repo.
+Run all commands inside:
 
-Step 1 – Clone repository
+```
+aws-terraform-one-click-deployment/project/terraform
+```
 
+### Step 1 — Clone repository
+```
 git clone https://github.com/Ravali-951/aws-terraform-one-click-deployment.git
 cd aws-terraform-one-click-deployment/project/terraform
+```
 
-
-
-Step 2 – Initialize Terraform
+### Step 2 — Initialize Terraform
+```
 terraform init
+```
 
-Step 3 – Review the plan (optional but recommended)
+### Step 3 — Review plan (optional)
+```
 terraform plan
+```
 
-Step 4 – Apply the configuration
+### Step 4 — Apply infrastructure
+```
 terraform apply
-# type: yes
+```
 
+Terraform will output the ALB DNS name:
 
-When it finishes, Terraform will print the ALB DNS name in the outputs:
+```
+alb_dns = "devops-assignment-alb-914552625.ap-south-1.elb.amazonaws.com"
+```
 
-alb_dns = "devops-assignment-alb-XXXXXXXX.ap-south-1.elb.amazonaws.com"
+---
 
-6. How to Test
+## 6. How to Test
 
-Use the alb_dns output from Terraform.
+Use the ALB DNS output:
 
+### Check root URL
+```
 http://devops-assignment-alb-914552625.ap-south-1.elb.amazonaws.com/
-  → should respond with:  Hello!
-
-http://devops-assignment-alb-914552625.ap-south-1.elb.amazonaws.com/health/
-  → should respond with:  ok
-
-
-These two URLs are required in the assignment instructions.
-
-You can also open them in a browser and take screenshots for submission.
-
-7. Screenshots (for assignment submission)
-
-The following were captured from AWS Console:
-
-VPC list showing devops-assignment-vpc
-
-Subnets (public + private)
-
-Route tables (public + private)
-
-Internet Gateway
-
-NAT Gateway
-
-Security groups (alb-sg and ec2-sg)
-
-Load Balancer with listener and target group
-
-Target Group with Healthy instances
-
-Auto Scaling Group with 2 instances
-
-EC2 instances view (both running)
-
-Browser output:
-
-http://<alb_dns>/ → Hello!
-
-http://<alb_dns>/health → ok
-
-8. Cleanup
-
-To avoid extra AWS charges, destroy everything when you are done:
-
-terraform destroy
-# type: yes
+```
+Expected:  
+```
+Hello!
+```
+<img width="1918" height="969" alt="Screenshot 2025-12-05 174512" src="https://github.com/user-attachments/assets/6c6e01ea-546a-43cf-bd7a-bceb61c3b924" />
 
 
-This removes all resources created by this configuration.
+### Check health endpoint
+```
+http://devops-assignment-alb-914552625.ap-south-1.elb.amazonaws.com/health
+```
+Expected:
+```
+ok
+```
+<img width="1919" height="970" alt="Screenshot 2025-12-05 174529" src="https://github.com/user-attachments/assets/2a7e0715-ed0a-4d45-8cf5-28762a88d0c3" />
 
-9. Notes
-
-Region used: ap-south-1 (Mumbai)
-
-Instances: t3.micro (fits in free tier, depending on account)
-
-The project is designed to be simple, readable, and easy to extend (for example, by adding RDS, more services, or CI/CD later).
+Above screenshots of both pages for assignment submission.
 
 
 ---
 
-Once you paste this and commit, refresh your GitHub repo page — the README should look:
+## 7. Screenshots Included
 
-- Properly aligned
-- With clear headings
-- With bullet lists and steps
-- Easy for the Apt team to understand.
+The following screenshots were captured and included:
+
+1. VPC list
+   ![Uploading Screenshot 2025-12-05 163952.png…]()
+   
+2. Subnets (public + private)
+   
+5. Route tables (public + private)  
+6. Internet Gateway  
+7. NAT Gateway  
+8. Security groups (alb-sg, ec2-sg)  
+9. Application Load Balancer  
+10. Target group showing Healthy instances  
+11. Auto Scaling Group with 2 running instances  
+12. EC2 Instances  
+13. Browser output for:
+   - `/` → Hello!
+   - `/health` → ok  
+
+---
+
+## 8. Cleanup
+
+To remove all AWS resources:
+
+```
+terraform destroy
+```
+
+---
+
+## 9. Notes
+
+- Region used: **ap-south-1 (Mumbai)**  
+- Instance type: **t3.micro**  
+- Designed for clarity and extendability  
+
+---
+
+```
+<img width="1024" height="1536" alt="image" src="https://github.com/user-attachments/assets/df2cd520-9aff-4607-9c22-f53f204acbf6" />
+
 
 
 
