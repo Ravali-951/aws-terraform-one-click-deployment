@@ -252,14 +252,15 @@ terraform destroy
 
 
 ✨ Live Project Link
-
 You can test the live deployed application here:
 
 Root Endpoint:
 👉 http://devops-assignment-alb-914552625.ap-south-1.elb.amazonaws.com/
-
 Health Check:
 👉 http://devops-assignment-alb-914552625.ap-south-1.elb.amazonaws.com/health
+
+
+
 
 
 
