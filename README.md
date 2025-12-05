@@ -249,9 +249,7 @@ terraform destroy
 - Instance type: **t3.micro**  
 - Designed for clarity and extendability  
 
----
 
-```
 
 ✨ Live Project Link
 
@@ -263,7 +261,6 @@ Root Endpoint:
 Health Check:
 👉 http://devops-assignment-alb-914552625.ap-south-1.elb.amazonaws.com/health
 
----
 
 
 
