@@ -174,7 +174,7 @@ ok
 ```
 <img width="1919" height="970" alt="Screenshot 2025-12-05 174529" src="https://github.com/user-attachments/assets/2a7e0715-ed0a-4d45-8cf5-28762a88d0c3" />
 
-Above screenshots of both pages for assignment submission.
+After successful deploy these are the outputs.
 
 
 ---
@@ -184,19 +184,18 @@ Above screenshots of both pages for assignment submission.
 The following screenshots were captured and included:
 
 1. VPC list
-   ![Uploading Screenshot 2025-12-05 163952.png…]()
    
 2. Subnets (public + private)
    
-5. Route tables (public + private)  
-6. Internet Gateway  
-7. NAT Gateway  
-8. Security groups (alb-sg, ec2-sg)  
-9. Application Load Balancer  
-10. Target group showing Healthy instances  
-11. Auto Scaling Group with 2 running instances  
-12. EC2 Instances  
-13. Browser output for:
+3. Route tables (public + private)  
+5. Internet Gateway  
+6. NAT Gateway  
+7. Security groups (alb-sg, ec2-sg)  
+8. Application Load Balancer  
+9. Target group showing Healthy instances  
+10. Auto Scaling Group with 2 running instances  
+11. EC2 Instances  
+12. Browser output for:
    - `/` → Hello!
    - `/health` → ok  
 
