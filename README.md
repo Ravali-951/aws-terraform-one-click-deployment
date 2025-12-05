@@ -201,6 +201,38 @@ The following screenshots were captured and included:
 
 ---
 
+
+
+## Screenshots
+
+### 1. Application Load Balancer
+![ALB](screenshots/alb.png)
+
+### 2. Target Group Health Check
+![Target Group](screenshots/target-group.png)
+
+### 3. API Test - Root Endpoint ( / )
+![API Root Test](screenshots/api-test-root.png)
+
+### 4. API Test - Health Endpoint ( /health )
+![API Health Test](screenshots/api-test-health.png)
+
+### 5. Private EC2 Instance (No Public IP)
+![EC2](screenshots/private-ec2.png)
+
+### 6. ALB Security Group
+![ALB SG](screenshots/alb-security-group.png)
+
+### 7. EC2 Security Group
+![EC2 SG](screenshots/ec2-security-group.png)
+
+### 8. VPC Subnets (2 Public + 2 Private)
+![VPC Subnets](screenshots/vpc-subnets.png)
+
+
+
+
+
 ## 8. Cleanup
 
 To remove all AWS resources:
